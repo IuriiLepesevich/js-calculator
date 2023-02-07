@@ -6,6 +6,7 @@ const buttonOperations = document.querySelectorAll('.operation');
 const buttonEqual = document.querySelector('.equal');
 
 let isOperation = false;
+let isDot = false;
 
 function clear() {
     resultField.value = '';
@@ -69,6 +70,7 @@ function computeTotal() {
     let result;
 
     while(arr.length > 1) {
+        console.log(parseFloat(arr[0]), arr[1], parseFloat(arr[2]));
         result = compute(parseFloat(arr[0]), arr[1], parseFloat(arr[2]));
         arr.splice(0, 3);
         arr.unshift(result);
@@ -82,11 +84,14 @@ function computeTotal() {
 
 for(const button of buttonNumbers) {
     button.addEventListener('click', function(){
-        if(this.textContent !== '.') {
-            resultField.value += parseFloat(this.textContent);
-            isOperation = true;
-        } else {
+        if(this.textContent === '.') {
+            if(!isDot) return;
             resultField.value += '.';
+            isDot = false;
+        } else {
+            resultField.value += parseFloat(this.textContent);
+            isDot = true;
+            isOperation = true;
         }
     });
 }
@@ -97,13 +102,14 @@ for(const button of buttonOperations) {
         resultField.value += (this.textContent === '÷') ? ' / ' :
         ` ${this.textContent} `;
         isOperation = false;
+        isDot = true;
     });
 }
 
 buttonDelete.addEventListener('click', function() {
     if(resultField.value.length) {
         const lastElem = resultField.value[resultField.value.length - 1];
-        if(isNaN(parseFloat(lastElem))) {
+        if(isNaN(parseFloat(lastElem)) && lastElem !== '.') {
             resultField.value = resultField.value.slice(0, -3);
         } else {
             resultField.value = resultField.value.slice(0, -1);
