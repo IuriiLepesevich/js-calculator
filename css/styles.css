@@ -19,7 +19,7 @@ button {
     flex: auto;
     max-width: 25%;
     flex: 1 1 auto;
-    padding: 5% 10%;
+    padding: 5% 0%;
     font-size: 2em;
     display: flex;
     justify-content: center;

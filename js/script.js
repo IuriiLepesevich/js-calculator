@@ -4,9 +4,9 @@ const buttonDelete = document.querySelector('.delete');
 const buttonClear = document.querySelector('.clear');
 const buttonOperations = document.querySelectorAll('.operation');
 const buttonEqual = document.querySelector('.equal');
+const buttonDot = document.querySelector('.dot')
 
 let isOperation = false;
-let isDot = false;
 
 function clear() {
     resultField.value = '';
@@ -82,15 +82,42 @@ function computeTotal() {
     }
 }
 
+function checkDot() {
+    let dotIndex = resultField.value.split('').reverse().indexOf('.');
+    let operationIndex = resultField.value.split('').reverse().indexOf(' ');
+
+    if(operationIndex === -1 && dotIndex > -1) return false;
+    if(operationIndex !== -1 && dotIndex < operationIndex) {
+        return false;
+    }
+    return true;
+}
+
+function checkMinus() {
+    const lastElem = resultField.value[resultField.value.length - 1]
+    if(!isNaN(lastElem) && lastElem !== ' ') return;
+    let minusIndex = resultField.value.split('').reverse().indexOf('-');
+    let operationIndex = resultField.value.split('').reverse().indexOf(' ');
+    
+    if(operationIndex === -1 && minusIndex > -1) return false;
+    if(operationIndex !== -1 && minusIndex < operationIndex) {
+        return false;
+    }
+    return true;
+}
+
+buttonDot.addEventListener('click', function(){
+    if(!checkDot()) return;
+    resultField.value += '.';
+});
+
 for(const button of buttonNumbers) {
     button.addEventListener('click', function(){
-        if(this.textContent === '.') {
-            if(!isDot) return;
-            resultField.value += '.';
-            isDot = false;
+        if(this.textContent === '-x') {
+            if(!checkMinus()) return;
+            resultField.value += '-';
         } else {
             resultField.value += parseFloat(this.textContent);
-            isDot = true;
             isOperation = true;
         }
     });
@@ -99,22 +126,21 @@ for(const button of buttonNumbers) {
 for(const button of buttonOperations) {
     button.addEventListener('click', function(){
         if (!isOperation) return;
-        resultField.value += (this.textContent === '÷') ? ' / ' :
-        ` ${this.textContent} `;
+        resultField.value += ` ${this.textContent} `;
         isOperation = false;
-        isDot = true;
     });
 }
 
 buttonDelete.addEventListener('click', function() {
-    if(resultField.value.length) {
-        const lastElem = resultField.value[resultField.value.length - 1];
-        if(isNaN(parseFloat(lastElem)) && lastElem !== '.') {
-            resultField.value = resultField.value.slice(0, -3);
-        } else {
-            resultField.value = resultField.value.slice(0, -1);
-        }
+    if(!resultField.value.length) return;
+
+    const lastElem = resultField.value[resultField.value.length - 1];
+    if(lastElem === ' ') {
+        resultField.value = resultField.value.slice(0, -3);
+    } else {
+        resultField.value = resultField.value.slice(0, -1);
     }
+    
     if(resultField.value.length) {
         isOperation = (resultField.value[resultField.value.length - 1] !== ' ');
     } else {
