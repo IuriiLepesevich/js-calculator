@@ -61,12 +61,17 @@ input::-webkit-inner-spin-button {
 .equal {
     max-width: 50%;
     flex: 2 1 auto;
+    border-radius: 20%;
 }
 
 .delete {
     border-radius: 0%;
 }
 
-.equal {
-    border-radius: 20%;
+.number {
+    background-color: green;
+}
+
+.operation {
+    background-color: red;
 }
