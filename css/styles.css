@@ -13,6 +13,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #E7E8D1;
 }
 
 button {
@@ -25,12 +26,17 @@ button {
     justify-content: center;
     align-items: center;
     border-radius: 30%;
+    background-color: #B85042;
+    border: none;
 }
 
 input {
     width: 75%;
     text-align: right;
     font-size: 2em;
+    background-color: #A7BEAE;
+    border: none;
+    border-bottom: 2px solid #B85042;
 }
 
 /*
@@ -43,11 +49,12 @@ input::-webkit-inner-spin-button {
 }
 
 .calculator {
-    border: 4px solid red;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: 400px;
+    width: 360px;
+    background-color: #A7BEAE;
+    border-radius: 10%;
 }
 
 .result-holder {
@@ -66,12 +73,4 @@ input::-webkit-inner-spin-button {
 
 .delete {
     border-radius: 0%;
-}
-
-.number {
-    background-color: green;
-}
-
-.operation {
-    background-color: red;
 }
