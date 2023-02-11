@@ -37,15 +37,6 @@ function division(a, b) {
     return a / b;
 }
 
-function factorial(a) {
-    if(!a) return 0;
-    let total = 1;
-    for(let i = a; i > 0; i--) {
-        total *= i;
-    }
-    return total;
-}
-
 function pow(a, b) {
     return a ** b;
 }
@@ -97,12 +88,12 @@ function checkDot() {
     return true;
 }
 
-function checkMinus() {
+function operateMinus() {
     if(resultField.value[resultField.value.length - 1] === '-') {
         let arr = resultField.value.split('');
         arr.pop();
         resultField.value = arr.join('');
-        return false;
+        return;
     }
     let arr;
     if(resultField.value.indexOf(' ') === -1) {
@@ -114,17 +105,11 @@ function checkMinus() {
     if(!isNaN(arr[length - 1]) && arr[length - 1]) {
         arr[length - 1] = parseFloat(arr[length - 1] * -1);
         resultField.value = arr.join(' ');
-        return false;
+        return;
     };
-
-    let minusIndex = resultField.value.split('').reverse().indexOf('-');
-    let operationIndex = resultField.value.split('').reverse().indexOf(' ');
     
-    if(operationIndex === -1 && minusIndex > -1) return false;
-    if(operationIndex !== -1 && minusIndex < operationIndex) {
-        return false;
-    }
-    return true;
+    resultField.value += '-';
+    return;
 }
 
 function removeTransition(e) {
@@ -147,8 +132,7 @@ for(const button of buttonNumbers) {
     button.addEventListener('click', function(){
 
         if(this.textContent === '-x') {
-            if(!checkMinus()) return;
-            resultField.value += '-';
+            operateMinus();
         } else if(this.textContent === '.') {
             if(!checkDot()) return;
             resultField.value += '.';
@@ -173,6 +157,8 @@ buttonDelete.addEventListener('click', function() {
     const lastElem = resultField.value[resultField.value.length - 1];
     if(lastElem === ' ') {
         resultField.value = resultField.value.slice(0, -3);
+    } else if(lastElem === 'N') {
+        clear();
     } else {
         resultField.value = resultField.value.slice(0, -1);
     }
