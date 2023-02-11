@@ -98,8 +98,25 @@ function checkDot() {
 }
 
 function checkMinus() {
-    const lastElem = resultField.value[resultField.value.length - 1]
-    if(!isNaN(lastElem) && lastElem !== ' ') return;
+    if(resultField.value[resultField.value.length - 1] === '-') {
+        let arr = resultField.value.split('');
+        arr.pop();
+        resultField.value = arr.join('');
+        return false;
+    }
+    let arr;
+    if(resultField.value.indexOf(' ') === -1) {
+        arr = Array(resultField.value);
+    } else {
+        arr = resultField.value.split(' ');
+    }
+    const length = arr.length;
+    if(!isNaN(arr[length - 1]) && arr[length - 1]) {
+        arr[length - 1] = parseFloat(arr[length - 1] * -1);
+        resultField.value = arr.join(' ');
+        return false;
+    };
+
     let minusIndex = resultField.value.split('').reverse().indexOf('-');
     let operationIndex = resultField.value.split('').reverse().indexOf(' ');
     
@@ -174,8 +191,6 @@ buttonEqual.addEventListener('click', computeTotal);
 document.addEventListener("keydown", function(event) {
     
     key = event.key;
-    console.log(key);
-
     const e = new Event('click');
 
     if(key === '.') document.querySelector(`#dot`).dispatchEvent(e);
