@@ -1,5 +1,7 @@
 const resultField = document.querySelector('.result');
 
+const buttons = document.querySelectorAll('button');
+
 const buttonNumbers = document.querySelectorAll('.number');
 const buttonOperations = document.querySelectorAll('.operation');
 
@@ -108,12 +110,25 @@ function checkMinus() {
     return true;
 }
 
+function removeTransition(e) {
+    if(e.propertyName !== 'transform') return;
+    this.classList.remove('clicked');
+}
+
+for(const button of buttons) {
+    button.addEventListener('click', function() {
+        this.classList.add('clicked');
+    });
+    button.addEventListener('transitionend', removeTransition);
+}
+
 for(const button of buttonNumbers) {
     if(!button.hasAttribute('id')) {
         button.setAttribute('id', `id-${button.textContent}`);
     }
     
     button.addEventListener('click', function(){
+
         if(this.textContent === '-x') {
             if(!checkMinus()) return;
             resultField.value += '-';
