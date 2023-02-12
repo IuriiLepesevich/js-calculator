@@ -27,6 +27,13 @@ button {
     transition: all 0.1s ease;
 }
 
+button:active {
+    background-color: rgb(255, 255, 105);
+    transform: scale(1.2);
+    border-color: #ffc600;
+    box-shadow: 0 0 1rem #ffc600;
+}
+
 input {
     width: 75%;
     text-align: right;

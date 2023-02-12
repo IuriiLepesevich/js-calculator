@@ -9,7 +9,6 @@ const buttonDelete = document.querySelector('.delete');
 const buttonClear = document.querySelector('.clear');
 const buttonEqual = document.querySelector('.equal');
 
-
 let isOperation = false;
 
 function clear() {
@@ -117,12 +116,20 @@ function removeTransition(e) {
     this.classList.remove('clicked');
 }
 
-for(const button of buttons) {
-    button.addEventListener('click', function() {
-        this.classList.add('clicked');
-    });
-    button.addEventListener('transitionend', removeTransition);
+function activate(selector, event) {
+    const elem = document.querySelector(selector);
+    const timeout = parseFloat(window.getComputedStyle(elem)
+                    .transitionDuration) * 1000;
+    
+    elem.dispatchEvent(event);
+    elem.classList.add('clicked');
+
+    setTimeout(() => {
+        elem.classList.remove('clicked');
+    }, timeout);
 }
+
+
 
 for(const button of buttonNumbers) {
     if(!button.hasAttribute('id')) {
@@ -155,10 +162,13 @@ buttonDelete.addEventListener('click', function() {
     if(!resultField.value.length) return;
 
     const lastElem = resultField.value[resultField.value.length - 1];
+
+    if(isNaN(lastElem) && lastElem !== ' ' && lastElem !== '.') {
+        clear();
+        return;
+    }
     if(lastElem === ' ') {
         resultField.value = resultField.value.slice(0, -3);
-    } else if(lastElem === 'N') {
-        clear();
     } else {
         resultField.value = resultField.value.slice(0, -1);
     }
@@ -179,15 +189,15 @@ document.addEventListener("keydown", function(event) {
     key = event.key;
     const e = new Event('click');
 
-    if(key === '.') document.querySelector(`#dot`).dispatchEvent(e);
-    else if(key === '+') document.querySelector(`#plus`).dispatchEvent(e);
-    else if(key === '-') document.querySelector(`#minus`).dispatchEvent(e);
-    else if(key === '*') document.querySelector(`#multiply`).dispatchEvent(e);
-    else if(key === '/') document.querySelector(`#divide`).dispatchEvent(e);
-    else if(key === '^') document.querySelector(`#exp`).dispatchEvent(e);
-    else if(key === '_') document.querySelector(`#negative`).dispatchEvent(e);
-    else if(key === 'Backspace') document.querySelector(`#Backspace`).dispatchEvent(e);
-    else if(key === 'Enter') document.querySelector(`#Enter`).dispatchEvent(e);
-    else if(!isNaN(key)) document.querySelector(`#id-${key}`).dispatchEvent(e);
+    if(key === '.') activate(`#dot`, e);
+    else if(key === '+') activate(`#plus`, e);
+    else if(key === '-') activate(`#minus`, e);
+    else if(key === '*') activate(`#multiply`, e);
+    else if(key === '/') activate(`#divide`, e);
+    else if(key === '^') activate(`#exp`, e);
+    else if(key === '_') activate(`#negative`, e);
+    else if(key === 'Backspace') activate(`#Backspace`, e);
+    else if(key === 'Enter') activate(`#Enter`, e);
+    else if(!isNaN(key)) activate(`#id-${key}`, e);
 
 });
