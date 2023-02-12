@@ -84,7 +84,6 @@ function computeTotal() {
         }
     }
 
-
     if(result >= 10**12) {
         resultField.value = parseFloat(result).toExponential(2);
     } else {
@@ -154,13 +153,15 @@ for(const button of buttonNumbers) {
     
     button.addEventListener('click', function(){
 
-        if(this.textContent === '-x') {
+        text = this.textContent;
+        if(text === '-x') {
             operateMinus();
-        } else if(this.textContent === '.') {
+        } else if(text === '.') {
             if(!checkDot()) return;
             resultField.value += '.';
         } else {
-            resultField.value += parseFloat(this.textContent);
+            if(text === '0' && !resultField.value) return;
+            resultField.value += parseFloat(text);
             isOperation = true;
         }
     });
