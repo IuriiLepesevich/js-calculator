@@ -92,8 +92,8 @@ function computeTotal() {
 }
 
 function checkDot() {
-    let dotIndex = resultField.value.split('').reverse().indexOf('.');
-    let operationIndex = resultField.value.split('').reverse().indexOf(' ');
+    const dotIndex = resultField.value.split('').reverse().indexOf('.');
+    const operationIndex = resultField.value.split('').reverse().indexOf(' ');
 
     if(((operationIndex !== -1 && dotIndex < operationIndex) || 
     (operationIndex === -1)) && dotIndex !== -1) {
@@ -160,7 +160,6 @@ for(const button of buttonNumbers) {
             if(!checkDot()) return;
             resultField.value += '.';
         } else {
-            if(text === '0' && !resultField.value) return;
             resultField.value += parseFloat(text);
             isOperation = true;
         }
@@ -178,20 +177,22 @@ for(const button of buttonOperations) {
 buttonDelete.addEventListener('click', function() {
     if(!resultField.value.length) return;
 
-    const lastElem = resultField.value[resultField.value.length - 1];
+    const lastElemBefore = resultField.value[resultField.value.length - 1];
 
-    if(isNaN(lastElem) && lastElem !== ' ' && lastElem !== '.') {
+    if(isNaN(lastElemBefore) && lastElemBefore !== ' ' && lastElemBefore !== '.') {
         clear();
         return;
     }
-    if(lastElem === ' ') {
+    if(lastElemBefore === ' ') {
         resultField.value = resultField.value.slice(0, -3);
     } else {
         resultField.value = resultField.value.slice(0, -1);
     }
 
+    const lastElemAfter = resultField.value[resultField.value.length - 1];
+
     if(resultField.value.length) {
-        isOperation = (resultField.value[resultField.value.length - 1] !== ' ');
+        isOperation = (lastElemAfter !== ' ' && lastElemAfter !== '.');
     } else {
         isOperation = false;
     }

@@ -41,6 +41,7 @@ input {
     background-color: #A7BEAE;
     border: none;
     border-bottom: 2px solid #B85042;
+    pointer-events: none;
 }
 
 /*
