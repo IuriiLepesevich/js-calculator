@@ -81,8 +81,8 @@ function checkDot() {
     let dotIndex = resultField.value.split('').reverse().indexOf('.');
     let operationIndex = resultField.value.split('').reverse().indexOf(' ');
 
-    if(operationIndex === -1 && dotIndex > -1) return false;
-    if(operationIndex !== -1 && dotIndex < operationIndex) {
+    if(((operationIndex !== -1 && dotIndex < operationIndex) || 
+    (operationIndex === -1)) && dotIndex !== -1) {
         return false;
     }
     return true;
