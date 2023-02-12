@@ -11,6 +11,14 @@ const buttonEqual = document.querySelector('.equal');
 
 let isOperation = false;
 
+const importance = {
+    '^': 1,
+    '*': 2,
+    '/': 2,
+    '+': 3,
+    '-': 3,
+}
+
 function clear() {
     resultField.value = '';
     isOperation = false;
@@ -63,12 +71,20 @@ function computeTotal() {
     let arr = resultField.value.split(' ');
     let result;
 
-    while(arr.length > 1) {
-        console.log(parseFloat(arr[0]), arr[1], parseFloat(arr[2]));
-        result = compute(parseFloat(arr[0]), arr[1], parseFloat(arr[2]));
-        arr.splice(0, 3);
-        arr.unshift(result);
+    for(let i = 1; i < 4; i++) {
+        let operators = [];
+        for(property in importance) {
+            if(importance[property] === i) operators.push(property);
+        }
+        const isOperator = (elem) => operators.includes(elem);
+        while(arr.findIndex(isOperator) !== -1) {
+            let index = arr.findIndex(isOperator);
+            result = compute(parseFloat(arr[index - 1]), arr[index], parseFloat(arr[index + 1]));
+            arr.splice(index - 1, 3, result);
+        }
     }
+
+
     if(result >= 10**12) {
         resultField.value = parseFloat(result).toExponential(2);
     } else {
