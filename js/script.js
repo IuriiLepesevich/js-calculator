@@ -10,6 +10,8 @@ const buttonClear = document.querySelector('.clear');
 const buttonEqual = document.querySelector('.equal');
 
 let isOperation = false;
+let isNumber = false;
+let isDot = false;
 
 const importance = {
     '^': 1,
@@ -22,6 +24,8 @@ const importance = {
 function clear() {
     resultField.value = '';
     isOperation = false;
+    isNumber = false;
+    isDot = false;
 }
 
 function add(a, b) {
@@ -87,7 +91,7 @@ function computeTotal() {
     if(result >= 10**12) {
         resultField.value = parseFloat(result).toExponential(2);
     } else {
-        resultField.value = Math.round(arr[0] * 100) / 100;
+        resultField.value = Math.round(arr[0] * 10000) / 10000;
     }
 }
 
@@ -99,7 +103,22 @@ function checkDot() {
     (operationIndex === -1)) && dotIndex !== -1) {
         return false;
     }
+    isDot = true;
     return true;
+}
+
+function operateNumber(number) {
+    isOperation = true;
+    const lastElem = resultField.value[resultField.value.length - 1];
+    
+    if(lastElem === '0' && number === '0' && !isNumber && !isDot) return;
+    if(lastElem === '0' && number !== '0' && !isNumber && !isDot) {
+        isNumber = true;
+        resultField.value = resultField.value.slice(0, -1) + parseFloat(number);
+        return;
+    }
+    if(number !== '0') isNumber = true;
+    resultField.value += parseFloat(number);
 }
 
 function operateMinus() {
@@ -160,8 +179,7 @@ for(const button of buttonNumbers) {
             if(!checkDot()) return;
             resultField.value += '.';
         } else {
-            resultField.value += parseFloat(text);
-            isOperation = true;
+            operateNumber(text);
         }
     });
 }
@@ -171,6 +189,8 @@ for(const button of buttonOperations) {
         if (!isOperation) return;
         resultField.value += ` ${this.textContent} `;
         isOperation = false;
+        isNumber = false;
+        isDot = false;
     });
 }
 
@@ -193,8 +213,20 @@ buttonDelete.addEventListener('click', function() {
 
     if(resultField.value.length) {
         isOperation = (lastElemAfter !== ' ' && lastElemAfter !== '.');
+        if(lastElemAfter === '0') {
+            const dotIndex = resultField.value.split('').reverse().indexOf('.');
+            const numberIndex = resultField.value.split('').reverse().join('').search(/[1-9]+/i);
+            if(numberIndex < dotIndex && dotIndex !== -1) isDot = true;
+        }
+        if(lastElemAfter === ' ') {
+            isOperation = false;
+            isDot = false;
+            isNumber = false;
+        }
     } else {
         isOperation = false;
+        isNumber = false;
+        isDot = false;
     }
 });
 
